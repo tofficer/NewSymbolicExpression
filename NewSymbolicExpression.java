@@ -18,11 +18,6 @@ class NewSymbolicExpression{
   //valid input is in form (String,String) (String,String) where each String can contain only uppercase           
   //letters, lowercase letters, and numbers
   public static void validateInput(String input){
-    if (input.length() < 5){
-      System.out.println("E1");
-      System.exit(0);
-    }
-    
     //^\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\)$ http://www.regexplanet.com/advanced/java/index.html
     String regex = "^\\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\\)$"; 
     Pattern p = Pattern.compile(regex);
