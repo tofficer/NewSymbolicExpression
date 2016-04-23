@@ -40,7 +40,7 @@ class NewSymbolicExpression{
     //allNodes holds all the nodes in the tree    
     Set<String> allNodes = new HashSet<String>();
     //allChildren only holds nodes that are children of some other node
-    Set<String> allChildren = new HashSet<String>();
+    Set<String> onlyChildren = new HashSet<String>();
     //holds relationships between parent nodes and their children
     Map<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
     
@@ -49,16 +49,18 @@ class NewSymbolicExpression{
     for (String temp : arr){
         String[] temparr = temp.split(",");
         String parent = temparr[0].substring(1); //don't include first parantheses (
-        String child = temparr.[1].substring(0,temparr[2].length()); //don't include second parantheses )
+        String child = temparr[1].substring(0,temparr[2].length()); //don't include second parantheses )
         
+        ArrayList<String> templist = new ArrayList<String>();
         if (map.get(parent) != null){
             //check if the parent-child relationship already exists in the map
-            ArrayList<String> templist = map.get(parent);
+            templist = map.get(parent);
             for (String str : templist){
                 if (child.equals(str)) return "E2";
-            }
+            }   
         }
-        map.put(parent, child);
+        templist.add(child);
+        map.put(parent, templist);
         allNodes.add(parent);
         allNodes.add(child);
         onlyChildren.add(child);
@@ -74,7 +76,7 @@ class NewSymbolicExpression{
     
     //check E4 -> multiple roots
     //note that root won't have any parents    
-    allNodes.remove(allChildren); //set difference operation
+    allNodes.remove(onlyChildren); //set difference operation
     if (allNodes.size() > 1){
         return "E4";
     }
@@ -99,7 +101,7 @@ class NewSymbolicExpression{
       if (visited.contains(parent)) return true;
       visited.add(parent);
       if (map.get(parent) != null){
-          for (String kid : map.get(parent){
+          for (String kid : map.get(parent)){
               if (isCycle(kid, map, visited)) return true;
           }
      }
@@ -107,18 +109,18 @@ class NewSymbolicExpression{
   }
 
   //recursive DFS method to construct the S expression
-  private static String helper(String root, Map<String,ArrayList<String>> map){
+  private static String helper(String parent, Map<String,ArrayList<String>> map){
     String leftChild = "";
     String rightChild = "";
     
     if (map.get(parent) != null){
         ArrayList<String> alist = Collections.sort(map.get(parent));//sort to get lexographically smallest
-        leftChild = helper(alist.get(0));
+        leftChild = helper(alist.get(0), map);
         if (alist.size() > 1){
-            rightChild = helper(alist.get(1));
+            rightChild = helper(alist.get(1), map);
         }
     }
     
-    return "("+root+leftChild+rightChild+")";
+    return "("+parent+leftChild+rightChild+")";
   }
 }
