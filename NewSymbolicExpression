@@ -52,7 +52,6 @@ class NewSymbolicExpression{
         String parent = temparr[0].substring(1); //don't include first parantheses (
         String child = temparr[1].substring(0,temparr[1].length()-1); //don't include second parantheses )
         
-        
         ArrayList<String> templist = new ArrayList<String>();
         if (map.get(parent) != null){
             //check if the parent-child relationship already exists in the map
