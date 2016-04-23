@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import java.lang.*;
 
 class NewSymbolicExpression{
@@ -22,13 +23,13 @@ class NewSymbolicExpression{
       System.exit(0);
     }
     
-    //^\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\)[\s]$ http://www.regexplanet.com/advanced/java/index.html
-    String regex = "^\\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\\)[\\s]$"; 
+    //^\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\)$ http://www.regexplanet.com/advanced/java/index.html
+    String regex = "^\\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\\)$"; 
     Pattern p = Pattern.compile(regex);
     
     String[] arr = input.split("\\s+"); //split string on whitespace 
     for (String test : arr){
-        Mathcher m = p.matcher(test);
+        Matcher m = p.matcher(test);
         if (!m.matches()){
             System.out.println("E1");
             System.exit(0);
@@ -49,7 +50,8 @@ class NewSymbolicExpression{
     for (String temp : arr){
         String[] temparr = temp.split(",");
         String parent = temparr[0].substring(1); //don't include first parantheses (
-        String child = temparr[1].substring(0,temparr[2].length()); //don't include second parantheses )
+        String child = temparr[1].substring(0,temparr[1].length()-1); //don't include second parantheses )
+        
         
         ArrayList<String> templist = new ArrayList<String>();
         if (map.get(parent) != null){
@@ -75,8 +77,8 @@ class NewSymbolicExpression{
     }
     
     //check E4 -> multiple roots
-    //note that root won't have any parents    
-    allNodes.remove(onlyChildren); //set difference operation
+    //note that root won't have any parents 
+    allNodes.removeAll(onlyChildren); //set difference operation
     if (allNodes.size() > 1){
         return "E4";
     }
@@ -114,7 +116,8 @@ class NewSymbolicExpression{
     String rightChild = "";
     
     if (map.get(parent) != null){
-        ArrayList<String> alist = Collections.sort(map.get(parent));//sort to get lexographically smallest
+        ArrayList<String> alist = map.get(parent);
+        Collections.sort(alist);//sort to get lexographically smallest
         leftChild = helper(alist.get(0), map);
         if (alist.size() > 1){
             rightChild = helper(alist.get(1), map);
