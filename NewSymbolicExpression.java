@@ -1,3 +1,5 @@
+/* package codechef; // don't place package name! */
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
@@ -22,7 +24,8 @@ class NewSymbolicExpression{
     String regex = "^\\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\\)$"; 
     Pattern p = Pattern.compile(regex);
     
-    String[] arr = input.split("\\s+"); //split string on whitespace 
+    //split input string on whitespace and check to see if each element matches (String,String) regex
+    String[] arr = input.split("\\s+"); 
     for (String test : arr){
         Matcher m = p.matcher(test);
         if (!m.matches()){
@@ -44,8 +47,9 @@ class NewSymbolicExpression{
     String[] arr = input.split("\\s+");
     for (String temp : arr){
         String[] temparr = temp.split(",");
-        String parent = temparr[0].substring(1); //don't include first parantheses (
-        String child = temparr[1].substring(0,temparr[1].length()-1); //don't include second parantheses )
+        //remove the first parantheses "("" for parent and second parantheses ")"" for child 
+        String parent = temparr[0].substring(1);
+        String child = temparr[1].substring(0,temparr[1].length()-1);
         
         ArrayList<String> templist = new ArrayList<String>();
         if (map.get(parent) != null){
