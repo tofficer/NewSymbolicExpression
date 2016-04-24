@@ -17,14 +17,14 @@ class NewSymbolicExpression{
   }
   
   //check for E1 -> bad input
-  //valid input is in form (String,String) (String,String) where each String can contain only uppercase           
+  //valid input is in form "(String,String) (String,String) ..." where each String can contain only uppercase           
   //letters, lowercase letters, and numbers
   public static void validateInput(String input){
     //^\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\)$ http://www.regexplanet.com/advanced/java/index.html
     String regex = "^\\(([a-zA-Z0-9]*[,][A-Za-z0-9]*)\\)$"; 
     Pattern p = Pattern.compile(regex);
     
-    //split input string on whitespace and check to see if each element matches (String,String) regex
+    //split input string on whitespace and check to see if each element matches our regex
     String[] arr = input.split("\\s+"); 
     for (String test : arr){
         Matcher m = p.matcher(test);
@@ -47,7 +47,7 @@ class NewSymbolicExpression{
     String[] arr = input.split("\\s+");
     for (String temp : arr){
         String[] temparr = temp.split(",");
-        //remove the first parantheses "("" for parent and second parantheses ")"" for child 
+        //remove the first parantheses "(" for parent and second parantheses ")" for child 
         String parent = temparr[0].substring(1);
         String child = temparr[1].substring(0,temparr[1].length()-1);
         
@@ -86,12 +86,14 @@ class NewSymbolicExpression{
         return "E5";
     }
     
+    //check for a cycle using the isCycle helper method
     String root = allNodes.iterator().next();
     Set<String> visited = new HashSet<String>();
     if (isCycle(root, map, visited)){
         return "E5";
     }
-        
+     
+    //there are no errors so use the helper method to construct the actual S expression   
     return helper(root, map);
   }
   
